@@ -1,3 +1,53 @@
+<?php
+    /*
+            action => declara la direccion de envio del formulario -->
+                    Si action = vacio -> El formulario de procesa en la misma pagina-->
+                    Si action posee ruta => la direccion de envio del formulario donde se procesaran -->
+            method => indica de que manera se envian los datos del formulario al servidor -->
+                    post => Los datos se envian de manera interna desde el formulario al servidor-->
+                    get => Los datos se enviaran a traves de la url de la pagina-->
+                    put => Los datos se envian desde el formulario al servidor por interno verificando que 
+                            la accion se realice solo una vez (se utiliza cuando los datos se actualizan en el servidor)
+     */
+
+     /*
+        $_POST es un array asociativo =>
+
+        $formulario = array('nombre' => '', 'email' => '', 'asunto' => '', 'comentario' => '');
+
+     */
+
+     //print_r($_POST);
+$mensaje=' ';
+// verificar que los datos del formulario se hayan enviado via POST
+/*--------------------------------------------------------------------
+// Las variables PHP solo existen si tienen un valor asociado
+----------------------------------------------------------------------*/
+    if(isset($_POST['enviar']) && $_POST['enviar']=='si'){
+        print_r($_POST);
+        $nombre = $_POST['nombre'];
+        $email = $_POST['email'];
+        $asunto = $_POST['asunto'];
+        $comentario = $_POST['comentario'];
+
+        if(!$nombre){
+            $mensaje = 'Ingrese nombre';
+        }elseif(!$email){
+            $mensaje = 'Ingrese email';
+        }elseif(!$asunto){
+            $mensaje = 'Ingrese asunto';
+        }elseif(!$comentario){
+            $mensaje = 'Ingrese comentario';
+        }else{
+            $mensaje = 'Gracias por su formulario';
+        }
+
+    }else{
+        $mensaje ="El formulario ha sido rechazado";
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,15 +69,20 @@
             
             <h3>Formulario de contacto</h3>
 
-            <form action="" method="post">
+                <?php if($mensaje): ?>
+                    <p class="alert alert-danger"><?php echo $mensaje; ?></p>
+                <?php endif;?>
+
+            <form action="" method="POST">
+
                 <div class="form-group">
                     <label for="nombre"> Ingrese su nombre: </label>
-                    <input type="text" name="nombre" placeholder="Ingrese su nombre" class = "form-control">
+                    <input type="text" name="nombre" placeholder="Ingrese su nombre" class = "form-control" value="<?php echo @($nombre); ?>">
                 </div>
 
                 <div class="form-group">
                     <label> Ingrese email: </label>
-                    <input type="email" name="email" placeholder="Ingrese su correo electronico" class="form-control">
+                    <input type="email" name="email" placeholder="Ingrese su correo electronico" class="form-control" value="<?php echo @($email); ?>">
                 </div>
 
                 <div class="form-group">
@@ -42,7 +97,7 @@
 
                 <div class="form-group">
                     <label>Comentario:</label>
-                    <textarea name="comentario" rows="4" placeholger="Ingrese su comentario" style="resize:nonde;"></textarea>
+                    <textarea name="comentario" rows="4" placeholger="Ingrese su comentario" style="resize:nonde;" ></textarea>
                 </div>
 
                 <div class="form-group">
